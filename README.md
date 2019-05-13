@@ -1,6 +1,6 @@
 <strong>Reactive DOM</strong><br>Ultra smallest and fastest way to bring reactivity in to your project :)
 <br><br>
-Works on all modern browsers & IE >= 11 :)
+Works even on IE 11 :)
 <br><br>
 - define props<br>
 - define computed props<br>
