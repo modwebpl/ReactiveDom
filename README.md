@@ -5,6 +5,6 @@ Works even on IE 11 :)
 - define props<br>
 - define computed props<br>
 - define watchers<br>
-- definie dynamically new custom props or computed props afer DOM render
+- definie dynamically new custom props or computed props and watchers afer DOM render
 <br><br><br><br>
 <strong>Demo</strong> link soon..
