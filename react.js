@@ -3,9 +3,6 @@ export class react {
     let _this = this;
 
     this.signals = {};
-    this.el = config.el || '*';
-    this.prop = config.prop || 'data-prop';
-    this.parse = config.parse || 'textContent';
     this.data = config.data;
     this.watch = config.watch || {};
     this.nodeList = {};
@@ -28,23 +25,16 @@ export class react {
     };
 
     this.observeData(config.data);
-    if (Object.keys(_this.config.watch).length > 0) this.subscribeWatchers(config.watch, config.data);
+    if (Object.keys(this.watch).length > 0) this.subscribeWatchers(this.watch, config.data);
 
     return {
-      data: this.data,
-      get: this.nodeList,
-      prop(name, val) {
-        _this.signals = {};
-        _this.data[name] = val;
-        typeof _this.data[name] === 'function' ? _this.makeComputed(_this.data, name, val) : _this.makeReactive(_this.data, name);
-        if (Object.keys(_this.watch).length > 0) _this.subscribeWatchers(_this.watch, _this.data);
-        return _this.parseDOM(document.body, _this.data);
+      data: _this.data,
+      get: _this.nodeList,
+      sig: _this.signals,
+      add(name, val, type = 'prop') {
+        return _this.add(name, val, type);
       },
-      watch(name, val) {
-        _this.signals = {};
-        _this.watch[name] = val;
-        typeof _this.data[name] === 'function' ? _this.makeComputed(_this.data, name, val) : _this.makeReactive(_this.data, name);
-        _this.subscribeWatchers(_this.watch, _this.data);
+      parse() {
         return _this.parseDOM(document.body, _this.data);
       }
     }
@@ -60,6 +50,13 @@ export class react {
     for (key in watchers) {
       if (watchers.hasOwnProperty(key)) _this.observe(key, watchers[key].bind(context))
     }
+  }
+
+  add(name, val, type = 'prop') {
+    type === 'watch' ? this.watch[name] = val : this.data[name] = val;
+    typeof this.data[name] === 'function' ? this.makeComputed(this.data, name, val) : this.makeReactive(this.data, name);
+    if (Object.keys(this.watch).length > 0) this.subscribeWatchers(this.watch, this.data);
+    return this.parseDOM(document.body, this.data);
   }
 
   observe(property, signalHandler) {
@@ -120,19 +117,19 @@ export class react {
 
   sync(attr, node, observable, property) {
     node[attr] = observable[property];
+
     this.observe(property, () => {
       node[attr] = observable[property]
     });
   }
 
   parseDOM(node, observable) {
-    let nodes = [].filter.call(this.el, (val) => {
-      return val.getAttribute(this.prop) !== null;
-    });
-  
-    nodes.forEach((val) => {
-      this.nodeList[val.attributes[this.prop].value] = val;
-      typeof (observable[val.attributes[this.prop].value]) !== 'undefined' ? this.sync(this.parse, val, observable, val.attributes[this.prop].value) : this.sync('value', val, observable, val.attributes[this.prop].value);
+    let attr;
+
+    each(document.body.querySelectorAll('[data-prop]'), (key, val) => {
+      this.nodeList[val.attributes['data-prop'].value] = val;
+      typeof (observable[val.attributes['data-prop'].value]) === 'undefined' ? attr = 'value' : attr = val.dataset.attr || 'textContent';
+      this.sync(attr, val, observable, val.attributes['data-prop'].value);
     });
   }
 }
