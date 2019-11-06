@@ -1,4 +1,4 @@
-<strong>Reactive DOM</strong><br>Ultra smallest and fastest way to bring reactivity in to your project :)
+<strong>PureJS Reactive DOM</strong><br>Ultra smallest and fastest way to bring reactivity in to your project :)
 <br><br>
 Works even on IE 11 :)
 <br><br>
