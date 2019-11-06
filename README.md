@@ -7,4 +7,4 @@ Works even on IE 11 :)
 - define watchers<br>
 - definie dynamically new custom props or computed props and watchers afer DOM render
 <br><br><br><br>
-<strong>Demo</strong> link soon..
+<strong>Demo</strong> here: http://www.modweb.pl/pub/locco/
